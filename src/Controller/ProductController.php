@@ -17,7 +17,7 @@ class ProductController extends AbstractController
     public function __construct(private readonly EntityManagerInterface $em){}
     
 
-    #[Route('/boutique', name: 'show_index')]
+    #[Route('/boutique', name: 'shop_index')]
     public function index(): Response
     {
        $products = $this->em->getRepository(Product::class)->findAll();
