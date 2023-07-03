@@ -3,18 +3,24 @@
 {% block title %}Hello CartController!{% endblock %}
 
 {% block body %}
-   <h1>Mon panier</h1>
+   
    <main class="page-wrapper">
 
     {% if cart|length > 0 %}
+
+    
 
         <div class="container position-relative zindex-2 pt-5 pb-lg-5 pb-md-4 pb-2">
             <div class="row">
                 <div class="col-lg-12 offset-lg-1 pt-1">
                   <h2 class="pt-md-2 my-2 mt-lg-5">Mon panier</h2>
                   <p>Ajouter d'autres articles disponibles sur le site <a href="{{ path('shop_index') }}">Voir les articles</a></p>
+                   <a class="text-success" href="{{path('cart_removeAll') }}">Suprimer tout mon panier</a>
+                   
+                   {% set total = null %}
 
                    {% for item in cart %}
+                   {% set total = total + (item.product.price * item.quantity) %}
 
                         <div class="d-sm-flex align-items-center border-top py-4">
                           <a class="d-inline-block flex-shrink-0 bg-seconddary rounded-1 p-sm-2 p-xl-3 mb-2 mb-sm-0" href="#">
@@ -26,23 +32,23 @@
                                 <p class="mb-2">{{ item.product.subtitle }}</p>
                               </div>
                               <div class="text.end ms-auto">
-                                {#<div class="fs-5 mb-2">{{ (total / 100)|number_format(2, ',', ',') }} $</div>#}
+                                <div class="fs-5 mb-2 ml-5">{{ (total / 100)|number_format(2, ',', ',') }} $</div>
                               </div>
                             </div>  
-                          {# <div class="count-input m5-n3">
-                              <a href="{{ path('cart_decrease', {id: product.id}) }}" class="btn btn-icon fs-xl" data-decrement>.</a>
-                              <input class="form-control" type="number" value="{{ product.quantity }}" readonly>
-                              <a href="{{ path('cart_add', {id: product.id}) }}" class="btn btn-icon fs-xl" data-increment></a>
+                           <div class="count-input m5-n3">
+                              <a href="{{ path('cart_decrease', {id: item.product.id}) }}" class="btn btn-icon fs-xl" data-decrement>.</a>
+                              <input class="form-control" type="number" value="{{ item.quantity }}" readonly>
+                              <a href="{{ path('cart_add', {id: item.product.id}) }}" class="btn btn-icon fs-xl" data-increment></a>
                             </div>
                             <div class="nav justify-content-end mt-n5 mt-sm-n3">
-                              <a class="nav-link fs-xl p-2" href="{{ path('cart_delete', {id: product.product.id}) }}" data-bs-toggle="tooltip" title="remove">
+                              <a class="nav-link fs-xl p-2" href="#" data-bs-toggle="tooltip" title="remove">
                                 <i class="ai-trash"></i>
                               </a>
                             </div>
-                            #} 
                             <div class="nav justify-content-end mt-n5 mt-sm-n3">
                               <a class="nav-link fs-xl p-2" href="{{ path('cart_remove', {id: item.product.id}) }}" data-bs-toggle="tooltip" title="Remove">
-                                <i class="ai-trash"></i>                            
+                                <i class="ai-trash"></i> 
+                                <buton class="btn btn-danger" type="submit">Suprimer</buton>                           
                               </a>
                             </div>
                   
@@ -50,8 +56,14 @@
                         </div>                
                       
                    {% endfor %}
-
+                   <ul class="list-unstyled py-3 mb-0">   
+                      <li class="d-flex justify-content-between mb-2">Nombre de produit:<span class="fw-semibold ms-2">{{ cart|length }}</span></li>
+                   </ul> 
+                   <div class="d-flex align-items-center justify-content-between border-top fs-xl pt-2">Total:<span class="fs-3 fw-semibold text-dark ms-2">
+                   {{ (total / 100)|number_format(2, ',', '.') }} $</span></div>
+                   <buton class="btn btn-lg btn-success w-30 w-sm-auto" type="submit">Valider mon panier</buton>
                 </div>
+                
             </div>
         </div>           
 
@@ -60,7 +72,7 @@
           <div class="text-center pt-4 mt-lg-2">
             <h1 class="display-5">Votre panier est vide</h1>
             <p class="fs-lg pb-2 pb-md-0 mb-4 mb-md-5">Commencez votre shopping des maintenant a travers nos articles</p>
-            <a class="btn btn-lg btn-primary" href="{{ path('shop_index') }}">Voir les produits</a>
+            <a class="btn btn-lg btn-success" href="{{ path('shop_index') }}">Voir les produits</a>
           <div/>
         <div/>       
     {% endif %}
